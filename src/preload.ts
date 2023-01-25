@@ -33,9 +33,19 @@ function app() {
       let button = document.createElement("button");
       form.appendChild(button);
       button.className = "btn btn-outline-light mx-1";
-
+      //<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Open modal for @mdo</button>
       button.type = "button";
       button.innerHTML = `<i class="${element.icon}"></i>`;
+
+      if (element.name == 'image') {
+        button.setAttribute('data-bs-toggle', 'modal');
+        button.setAttribute('data-bs-target', '#imageModal');
+      }
+
+      if (element.name == 'link') {
+        button.setAttribute('data-bs-toggle', 'modal');
+        button.setAttribute('data-bs-target', '#linkModal');
+      }
 
       button.addEventListener('click', event => {
         event.preventDefault();
@@ -92,20 +102,42 @@ function app() {
     textarea.value = text;
   }
 
-  let bold_button = document.querySelector('.btn.btn-outline-light');
+  document.getElementById("image-ok").addEventListener('click', () => {
+    let selectionStart = textarea.selectionStart;
+    let selectionEnd = textarea.selectionEnd;
 
-  bold_button.addEventListener('click', event => {
-    event.preventDefault();
-    
-    // let selectionStart = textarea.selectionStart;
-    // let selectionEnd = textarea.selectionEnd;
+    let link: HTMLInputElement = document.querySelector('#image-link');
+    let alt: HTMLInputElement = document.querySelector('#image-alt');
 
-    // let value = `${textarea.value.slice(0, selectionStart)}${MarkdownParser.syntax.bold.symbol}${textarea.value.slice(selectionStart, selectionEnd)}${MarkdownParser.syntax.bold.symbol}${textarea.value.slice(selectionEnd, textarea.value.length)}`;
+    let prepared = `![${alt.value}](${link.value})`;
 
-    // setSourceText(value);
-    // setResultHTML(MarkdownParser.parseAll(value));
+    let value = `${textarea.value.slice(0, selectionStart)} ${prepared} ${textarea.value.slice(selectionStart, textarea.value.length)}`;
 
-    // textarea.focus();
-    // textarea.setSelectionRange(selectionStart, selectionEnd + MarkdownParser.syntax.bold.symbol.length * 2);
+    setSourceText(value);
+    setResultHTML(markdown.parseAll(value));
   });
+
+  document.getElementById("link-ok").addEventListener('click', () => {
+    let selectionStart = textarea.selectionStart;
+    let selectionEnd = textarea.selectionEnd;
+
+    let link: HTMLInputElement = document.querySelector('#link');
+    let alt: HTMLInputElement = document.querySelector('#link-name');
+
+    let prepared = `[${alt.value}](${link.value})`;
+
+    let value = `${textarea.value.slice(0, selectionStart)} ${prepared} ${textarea.value.slice(selectionStart, textarea.value.length)}`;
+
+    setSourceText(value);
+    setResultHTML(markdown.parseAll(value));
+  });
+
+  window.addEventListener('show.bs.modal', event => {
+    let element: any = event.target;
+    element.querySelectorAll('input').forEach((x: { value: string; }) => {
+      x.value = '';
+    });
+  });
+
+  setResultHTML(markdown.parseAll(textarea.value));
 }

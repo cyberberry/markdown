@@ -5,5 +5,5 @@ export class LinkElement extends Element {
     symbol: string = "";
     regexp: RegExp = /\[(.*?)\]\((.*?)\)/g;
     pattern: string = '<a href="$2">$1</a>';
-    icon: string = '';
+    icon: string = 'fa-solid fa-link';
 }

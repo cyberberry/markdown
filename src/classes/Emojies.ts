@@ -1,6 +1,4 @@
-
-export class Emojies {
-    emojies: Record<string, string> = {
+export let Emojies: Record<string, string> = {
     ":smile:": "😄",
     ":laughing:": "😆",
     ":blush:": "😊",
@@ -125,6 +123,4 @@ export class Emojies {
     ":information_desk_person:": "💁",
     ":raising_hand:": "🙋",
     ":bride_with_veil:": "️👰‍♀"
-}
-
 }
